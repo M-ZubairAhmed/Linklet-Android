@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +16,19 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+
     final String debugLogHeader = "Linklet Debug Message";
     Call<Links> call;
     List<Link> arraylistLink;
     ListView linksListV;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         linksListV = (ListView) findViewById(R.id.list_view_xml);
+        linksListV.setEmptyView(findViewById(R.id.loading_progress_xml));
         arraylistLink = new ArrayList<>();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -49,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
                     String[] simpletTitlesArray = new String[arraylistLink.size()];
                     for (int i = 0; i < simpletTitlesArray.length; i++) {
                         simpletTitlesArray[i] = arraylistLink.get(i).getTitle();
-//                        Log.d(debugLogHeader, simpletTitlesArray[i]);
-//                        Toast.makeText(MainActivity.this, simpletTitlesArray[i], Toast.LENGTH_SHORT).show();
                     }
                     ArrayAdapter<String> simpleAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, simpletTitlesArray);
                     linksListV.setAdapter(simpleAdapter);
