@@ -54,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 int count = listV.getCount();
-                int lastButCount = 2;
+                int lastButCount = 1;
                 if (scrollState == SCROLL_STATE_IDLE) {
-                    if (listV.getLastVisiblePosition() >= count - lastButCount && !reachedLastPage) {
+                    if (listV.getLastVisiblePosition() + lastButCount == count && !reachedLastPage) {
                         loadMoreProgressB.setVisibility(View.VISIBLE);
                         loadRemainingPages(currentPage);
                     }
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
             }
         });
 
