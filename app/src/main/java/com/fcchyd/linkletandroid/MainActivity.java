@@ -3,8 +3,10 @@ package com.fcchyd.linkletandroid;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
     List<Link> listJsonLink;
     ListView listV;
     List<String> titlesArrayList;
+    Retrofit retrofit;
+    boolean reachedLastPage;
+    int currentPage;
+    ArrayAdapter<String> simpleAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +39,35 @@ public class MainActivity extends AppCompatActivity {
         listJsonLink = new ArrayList<>();
         titlesArrayList = new ArrayList<>();
 
-        Retrofit retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.links.linklet.ml")
                 .addConverterFactory(GsonConverterFactory
                         .create())
                 .build();
+
+        loadInitialPage();
+
+        listV.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                int count = listV.getCount();
+                int lastButCount = 2;
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    if (listV.getLastVisiblePosition() >= count - lastButCount && !reachedLastPage) {
+                        loadRemainingPages(currentPage);
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+
+    }
+
+    void loadInitialPage() {
 
         HttpsInterface HttpsInterface = retrofit
                 .create(HttpsInterface.class);
@@ -48,12 +78,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Links> call, Response<Links> response) {
                 try {
+                    reachedLastPage = response.body().isIsLastPage();
+                    currentPage = (int) response.body().getPage();
                     listJsonLink = response.body().getLinks();
                     for (Link link : listJsonLink) {
-                        titlesArrayList.add(link.getTitle());
+                        if (link.getTitle() != null)
+                            titlesArrayList.add(link.getTitle().trim());
                     }
-
-                    ArrayAdapter<String> simpleAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, titlesArrayList);
+//
+                    simpleAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, titlesArrayList);
                     listV.setAdapter(simpleAdapter);
                 } catch (Exception e) {
                     Log.e("erro", "" + e);
@@ -65,7 +98,41 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    void loadRemainingPages(int page) {
+        page = page + 1;
+
+        HttpsInterface HttpsInterface = retrofit
+                .create(HttpsInterface.class);
+
+        call = HttpsInterface.httpGETpageNumber(page);
+
+        call.enqueue(new Callback<Links>() {
+            @Override
+            public void onResponse(Call<Links> call, Response<Links> response) {
+                try {
+                    listJsonLink = response.body().getLinks();
+                    currentPage = (int) response.body().getPage();
+                    reachedLastPage = response.body().isIsLastPage();
+                    for (Link link : listJsonLink) {
+                        if (link.getTitle() != null) {
+                            titlesArrayList.add(link.getTitle().trim());
+                        }
+                    }
+                    simpleAdapter.notifyDataSetChanged();
+                    getSupportActionBar().setTitle(String.valueOf(currentPage));
+//                    Toast.makeText(MainActivity.this, String.valueOf(currentPage), Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Log.e(debugLogHeader, "error:" + e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Links> call, Throwable t) {
+
+            }
+        });
 
     }
 }
