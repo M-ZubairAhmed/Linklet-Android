@@ -19,17 +19,19 @@ public class MainActivity extends AppCompatActivity {
 
     final String debugLogHeader = "Linklet Debug Message";
     Call<Links> call;
-    List<Link> arraylistLink;
-    ListView linksListV;
+    List<Link> listJsonLink;
+    ListView listV;
+    List<String> titlesArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        linksListV = (ListView) findViewById(R.id.list_view_xml);
-        linksListV.setEmptyView(findViewById(R.id.loading_progress_xml));
-        arraylistLink = new ArrayList<>();
+        listV = (ListView) findViewById(R.id.list_view_xml);
+        listV.setEmptyView(findViewById(R.id.loading_progress_xml));
+        listJsonLink = new ArrayList<>();
+        titlesArrayList = new ArrayList<>();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.links.linklet.ml")
@@ -46,14 +48,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Links> call, Response<Links> response) {
                 try {
-                    arraylistLink = response.body().getLinks();
-
-                    String[] simpletTitlesArray = new String[arraylistLink.size()];
-                    for (int i = 0; i < simpletTitlesArray.length; i++) {
-                        simpletTitlesArray[i] = arraylistLink.get(i).getTitle();
+                    listJsonLink = response.body().getLinks();
+                    for (Link link : listJsonLink) {
+                        titlesArrayList.add(link.getTitle());
                     }
-                    ArrayAdapter<String> simpleAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, simpletTitlesArray);
-                    linksListV.setAdapter(simpleAdapter);
+
+                    ArrayAdapter<String> simpleAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, titlesArrayList);
+                    listV.setAdapter(simpleAdapter);
                 } catch (Exception e) {
                     Log.e("erro", "" + e);
                 }
