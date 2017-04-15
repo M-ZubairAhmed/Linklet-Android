@@ -21,8 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     final String debugLogHeader = "Linklet Debug Message";
-    Call<Links> call;
-    List<Link> listJsonLink;
+    Call<LinksJavaBean> call;
+    List<LinkJavaBean> listJsonLink;
     ListView listV;
     List<String> titlesArrayList;
     Retrofit retrofit;
@@ -71,20 +71,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void loadInitialPage() {
+        HttpInterface HttpInterface = retrofit
+                .create(HttpInterface.class);
 
-        HttpsInterface HttpsInterface = retrofit
-                .create(HttpsInterface.class);
+        call = HttpInterface.httpGETpageNumber(1);
 
-        call = HttpsInterface.httpGETpageNumber(1);
-
-        call.enqueue(new Callback<Links>() {
+        call.enqueue(new Callback<LinksJavaBean>() {
             @Override
-            public void onResponse(Call<Links> call, Response<Links> response) {
+            public void onResponse(Call<LinksJavaBean> call, Response<LinksJavaBean> response) {
                 try {
                     reachedLastPage = response.body().isIsLastPage();
                     currentPage = (int) response.body().getPage();
                     listJsonLink = response.body().getLinks();
-                    for (Link link : listJsonLink) {
+                    for (LinkJavaBean link : listJsonLink) {
                         if (link.getTitle() != null)
                             titlesArrayList.add(link.getTitle().trim());
                     }
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Links> call, Throwable t) {
+            public void onFailure(Call<LinksJavaBean> call, Throwable t) {
 
             }
         });
@@ -106,34 +105,32 @@ public class MainActivity extends AppCompatActivity {
     void loadRemainingPages(int page) {
         page = page + 1;
 
-        HttpsInterface HttpsInterface = retrofit
-                .create(HttpsInterface.class);
+        HttpInterface HttpInterface = retrofit
+                .create(HttpInterface.class);
 
-        call = HttpsInterface.httpGETpageNumber(page);
+        call = HttpInterface.httpGETpageNumber(page);
 
-        call.enqueue(new Callback<Links>() {
+        call.enqueue(new Callback<LinksJavaBean>() {
             @Override
-            public void onResponse(Call<Links> call, Response<Links> response) {
+            public void onResponse(Call<LinksJavaBean> call, Response<LinksJavaBean> response) {
                 try {
                     listJsonLink = response.body().getLinks();
                     currentPage = (int) response.body().getPage();
                     reachedLastPage = response.body().isIsLastPage();
-                    for (Link link : listJsonLink) {
+                    for (LinkJavaBean link : listJsonLink) {
                         if (link.getTitle() != null) {
                             titlesArrayList.add(link.getTitle().trim());
                         }
                     }
                     loadMoreProgressB.setVisibility(View.GONE);
                     simpleAdapter.notifyDataSetChanged();
-                    getSupportActionBar().setTitle(String.valueOf(currentPage));
-//                    Toast.makeText(MainActivity.this, String.valueOf(currentPage), Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     Log.e(debugLogHeader, "error:" + e);
                 }
             }
 
             @Override
-            public void onFailure(Call<Links> call, Throwable t) {
+            public void onFailure(Call<LinksJavaBean> call, Throwable t) {
 
             }
         });

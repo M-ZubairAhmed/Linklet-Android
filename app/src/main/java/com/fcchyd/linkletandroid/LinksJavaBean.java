@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class Links {
+class LinksJavaBean {
 
     @SerializedName("page")
     @Expose
@@ -26,7 +26,7 @@ class Links {
     @SerializedName("links")
     @Expose
 
-    private List<Link> links = null;
+    private List<LinkJavaBean> links = null;
 
     long getPage() {
         return page;
@@ -60,11 +60,11 @@ class Links {
         this.isLastPage = isLastPage;
     }
 
-    List<Link> getLinks() {
+    List<LinkJavaBean> getLinks() {
         return links;
     }
 
-    void setLinks(List<Link> links) {
+    void setLinks(List<LinkJavaBean> links) {
         this.links = links;
     }
 

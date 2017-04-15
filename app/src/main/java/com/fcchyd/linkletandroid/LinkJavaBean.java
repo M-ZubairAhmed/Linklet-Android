@@ -3,7 +3,7 @@ package com.fcchyd.linkletandroid;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-class Link {
+class LinkJavaBean {
 
     @SerializedName("_id")
     @Expose
