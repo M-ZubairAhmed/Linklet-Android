@@ -3,10 +3,11 @@ package com.fcchyd.linkletandroid;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +29,16 @@ public class MainActivity extends AppCompatActivity {
     boolean reachedLastPage;
     int currentPage;
     ArrayAdapter<String> simpleAdapter;
+    ProgressBar loadMoreProgressB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadMoreProgressB = (ProgressBar) findViewById(R.id.more_loading_progress_xml);
         listV = (ListView) findViewById(R.id.list_view_xml);
-        listV.setEmptyView(findViewById(R.id.loading_progress_xml));
+        listV.setEmptyView(findViewById(R.id.initial_loading_progress_xml));
         listJsonLink = new ArrayList<>();
         titlesArrayList = new ArrayList<>();
 
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 int lastButCount = 2;
                 if (scrollState == SCROLL_STATE_IDLE) {
                     if (listV.getLastVisiblePosition() >= count - lastButCount && !reachedLastPage) {
+                        loadMoreProgressB.setVisibility(View.VISIBLE);
                         loadRemainingPages(currentPage);
                     }
                 }
@@ -120,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                             titlesArrayList.add(link.getTitle().trim());
                         }
                     }
+                    loadMoreProgressB.setVisibility(View.GONE);
                     simpleAdapter.notifyDataSetChanged();
                     getSupportActionBar().setTitle(String.valueOf(currentPage));
 //                    Toast.makeText(MainActivity.this, String.valueOf(currentPage), Toast.LENGTH_LONG).show();
