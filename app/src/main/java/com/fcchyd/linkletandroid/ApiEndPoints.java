@@ -2,7 +2,7 @@ package com.fcchyd.linkletandroid;
 
 class ApiEndPoints {
 
-    static final String END_POINT_ALL = "\"/api/links/all/\"";
+    static final String ENDPOINT_ALL = "/api/links/all/";
 
-    static final String END_POINT_FILTER = "\"/api/links/filter/\"";
+    static final String ENDPOINT_FILTER = "\"/api/links/filter/\"";
 }

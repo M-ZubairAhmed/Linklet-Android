@@ -7,16 +7,16 @@ import retrofit2.http.Query;
 
 interface HttpsInterface {
 
-    @GET(ApiEndPoints.END_POINT_ALL)
+    @GET(ApiEndPoints.ENDPOINT_ALL)
     Call<Links>
     httpGETpageNumber(@Query("page") int pageNumber);
 
-    @GET(ApiEndPoints.END_POINT_ALL)
+    @GET(ApiEndPoints.ENDPOINT_ALL)
     Call<Links>
     httpGETdefault();
 
-    @GET(ApiEndPoints.END_POINT_FILTER)
+    @GET(ApiEndPoints.ENDPOINT_FILTER)
     Call<Links>
-    httpGETinRange(@Query("start") long startTime, @Query("end") long endTime);
+    httpGETinDateRange(@Query("start") long startTime, @Query("end") long endTime);
 
 }
