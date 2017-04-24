@@ -1,5 +1,7 @@
 package com.fcchyd.linkletandroid;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -82,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
         listV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, arrayListMod1.get(position).getUrl(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, arrayListMod1.get(position).getUrl(), Toast.LENGTH_LONG).show();
+                openLinkInBrowser(position);
             }
         });
 
@@ -157,5 +160,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    void openLinkInBrowser(int position) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(arrayListMod1.get(position).getUrl()));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Toast.makeText(MainActivity.this, "There is'nt a single browser application that could open up this link", Toast.LENGTH_SHORT).show();
+        }
     }
 }
