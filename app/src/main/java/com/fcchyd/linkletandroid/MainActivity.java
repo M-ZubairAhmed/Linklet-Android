@@ -5,13 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.fcchyd.linkletandroid.Adapter.Custom1Adapter;
 import com.fcchyd.linkletandroid.Model.Link;
 import com.fcchyd.linkletandroid.Model.Links;
 import com.fcchyd.linkletandroid.Network.HttpInterface;
+import com.fcchyd.linkletandroid.Type.LinkDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     int currentPage;
     ArrayAdapter<String> simpleAdapter;
     ProgressBar loadMoreProgressB;
+    ArrayList<LinkDataType> arrayListMod1;
+    Custom1Adapter custom1Adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         listV.setEmptyView(findViewById(R.id.initial_loading_progress_xml));
         listJsonLink = new ArrayList<>();
         titlesArrayList = new ArrayList<>();
+        arrayListMod1 = new ArrayList<>();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.links.linklet.ml")
@@ -72,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        listV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, arrayListMod1.get(position).getUrl(), Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     void loadInitialPage() {
@@ -88,12 +102,14 @@ public class MainActivity extends AppCompatActivity {
                     currentPage = Integer.valueOf(response.body().getPage());
                     listJsonLink = response.body().getLinks();
                     for (Link link : listJsonLink) {
-                        if (link.getTitle() != null)
-                            titlesArrayList.add(link.getTitle().trim());
+                        if (link.getTitle() != null && link.getDescription() != null)
+//                            titlesArrayList.add(link.getTitle().trim());
+                            arrayListMod1.add(new LinkDataType(link.getTitle().trim(), link.getDescription().trim(), link.getUrl().trim()));
                     }
-//
-                    simpleAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, titlesArrayList);
-                    listV.setAdapter(simpleAdapter);
+                    custom1Adapter = new Custom1Adapter(MainActivity.this, arrayListMod1);
+                    listV.setAdapter(custom1Adapter);
+//                    simpleAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, titlesArrayList);
+//                    listV.setAdapter(simpleAdapter);
                 } catch (Exception e) {
                     Log.e("erro", "" + e);
                 }
@@ -122,12 +138,14 @@ public class MainActivity extends AppCompatActivity {
                     currentPage = Integer.valueOf(response.body().getPage());
                     reachedLastPage = response.body().isIsLastPage();
                     for (Link link : listJsonLink) {
-                        if (link.getTitle() != null) {
-                            titlesArrayList.add(link.getTitle().trim());
+                        if (link.getTitle() != null && link.getDescription() != null) {
+//                            titlesArrayList.add(link.getTitle().trim());
+                            arrayListMod1.add(new LinkDataType(link.getTitle().trim(), link.getDescription().trim(), link.getUrl().trim()));
                         }
                     }
                     loadMoreProgressB.setVisibility(View.GONE);
-                    simpleAdapter.notifyDataSetChanged();
+                    custom1Adapter.notifyDataSetChanged();
+//                    simpleAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
                     Log.e(debugLogHeader, "error:" + e);
                 }
