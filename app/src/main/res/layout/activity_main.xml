@@ -23,7 +23,7 @@
         android:clipToPadding="false"
         android:fitsSystemWindows="true"
         android:scrollbars="vertical"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="2dp" />
 
     <ProgressBar
         android:id="@+id/more_loading_progress_xml"
