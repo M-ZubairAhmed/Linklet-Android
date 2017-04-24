@@ -1,45 +1,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_row_xml"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dip">
-
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="TODOasdf"
-        android:paddingStart="16dp"
-        android:src="@drawable/placeholder" />
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@color/colorDivider"
+    android:padding="12dp">
 
     <TextView
-        android:id="@+id/secondLine"
-        android:layout_width="fill_parent"
-        android:layout_height="26dip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/icon"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:text="Description"
-        android:textSize="12sp"
-        tools:hint="lkasjdflkaskdfdslkf" />
-
-    <TextView
-        android:id="@+id/firstLine"
+        android:id="@+id/title_row_xml"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/secondLine"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/icon"
-        android:gravity="center_vertical"
-        android:text="Example application"
+        android:ellipsize="end"
+        android:gravity="center_vertical|start"
+        android:maxLines="1"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="16sp"
-        tools:hint="asdfasdf" />
+        android:textStyle="bold"
+        tools:hint="Title of the Link" />
+
+    <TextView
+        android:id="@+id/desc_row_xml"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_row_xml"
+        android:ellipsize="end"
+        android:gravity="center_vertical|start"
+        android:maxLines="3"
+        android:paddingTop="6dp"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="12sp"
+        tools:hint="This is the very long description of the link given, i have limited the max lines for this to be 3 after that it will automatically ellipsize. I am not sure if doing 3 is better will figure out after i make it . Tell me your review." />
 
 </RelativeLayout>
 
