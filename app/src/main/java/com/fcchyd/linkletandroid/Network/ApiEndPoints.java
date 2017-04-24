@@ -1,6 +1,6 @@
-package com.fcchyd.linkletandroid;
+package com.fcchyd.linkletandroid.Network;
 
-class ApiEndPoints {
+public class ApiEndPoints {
 
     static final String ENDPOINT_ALL = "/api/links/all/";
 

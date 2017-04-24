@@ -9,6 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.fcchyd.linkletandroid.Model.Link;
+import com.fcchyd.linkletandroid.Model.Links;
+import com.fcchyd.linkletandroid.Network.HttpInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +25,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     final String debugLogHeader = "Linklet Debug Message";
-    Call<LinksJavaBean> call;
-    List<LinkJavaBean> listJsonLink;
+    Call<Links> call;
+    List<Link> listJsonLink;
     ListView listV;
     List<String> titlesArrayList;
     Retrofit retrofit;
@@ -76,14 +80,14 @@ public class MainActivity extends AppCompatActivity {
 
         call = HttpInterface.httpGETpageNumber(1);
 
-        call.enqueue(new Callback<LinksJavaBean>() {
+        call.enqueue(new Callback<Links>() {
             @Override
-            public void onResponse(Call<LinksJavaBean> call, Response<LinksJavaBean> response) {
+            public void onResponse(Call<Links> call, Response<Links> response) {
                 try {
                     reachedLastPage = response.body().isIsLastPage();
-                    currentPage = (int) response.body().getPage();
+                    currentPage = Integer.valueOf(response.body().getPage());
                     listJsonLink = response.body().getLinks();
-                    for (LinkJavaBean link : listJsonLink) {
+                    for (Link link : listJsonLink) {
                         if (link.getTitle() != null)
                             titlesArrayList.add(link.getTitle().trim());
                     }
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LinksJavaBean> call, Throwable t) {
+            public void onFailure(Call<Links> call, Throwable t) {
 
             }
         });
@@ -110,14 +114,14 @@ public class MainActivity extends AppCompatActivity {
 
         call = HttpInterface.httpGETpageNumber(page);
 
-        call.enqueue(new Callback<LinksJavaBean>() {
+        call.enqueue(new Callback<Links>() {
             @Override
-            public void onResponse(Call<LinksJavaBean> call, Response<LinksJavaBean> response) {
+            public void onResponse(Call<Links> call, Response<Links> response) {
                 try {
                     listJsonLink = response.body().getLinks();
-                    currentPage = (int) response.body().getPage();
+                    currentPage = Integer.valueOf(response.body().getPage());
                     reachedLastPage = response.body().isIsLastPage();
-                    for (LinkJavaBean link : listJsonLink) {
+                    for (Link link : listJsonLink) {
                         if (link.getTitle() != null) {
                             titlesArrayList.add(link.getTitle().trim());
                         }
@@ -130,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LinksJavaBean> call, Throwable t) {
+            public void onFailure(Call<Links> call, Throwable t) {
 
             }
         });

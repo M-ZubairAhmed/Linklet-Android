@@ -1,70 +1,66 @@
-package com.fcchyd.linkletandroid;
+
+package com.fcchyd.linkletandroid.Model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class LinksJavaBean {
+public class Links {
 
     @SerializedName("page")
     @Expose
-    private long page;
-
+    private String page;
     @SerializedName("perPage")
     @Expose
     private long perPage;
-
     @SerializedName("totalLinks")
     @Expose
     private long totalLinks;
-
     @SerializedName("isLastPage")
     @Expose
     private boolean isLastPage;
-
     @SerializedName("links")
     @Expose
+    private List<Link> links = null;
 
-    private List<LinkJavaBean> links = null;
-
-    long getPage() {
+    public String getPage() {
         return page;
     }
 
-    void setPage(long page) {
+    public void setPage(String page) {
         this.page = page;
     }
 
-    long getPerPage() {
+    public long getPerPage() {
         return perPage;
     }
 
-    void setPerPage(long perPage) {
+    public void setPerPage(long perPage) {
         this.perPage = perPage;
     }
 
-    long getTotalLinks() {
+    public long getTotalLinks() {
         return totalLinks;
     }
 
-    void setTotalLinks(long totalLinks) {
+    public void setTotalLinks(long totalLinks) {
         this.totalLinks = totalLinks;
     }
 
-    boolean isIsLastPage() {
+    public boolean isIsLastPage() {
         return isLastPage;
     }
 
-    void setIsLastPage(boolean isLastPage) {
+    public void setIsLastPage(boolean isLastPage) {
         this.isLastPage = isLastPage;
     }
 
-    List<LinkJavaBean> getLinks() {
+    public List<Link> getLinks() {
         return links;
     }
 
-    void setLinks(List<LinkJavaBean> links) {
+    public void setLinks(List<Link> links) {
         this.links = links;
     }
 

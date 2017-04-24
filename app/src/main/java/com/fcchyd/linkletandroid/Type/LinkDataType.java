@@ -1,6 +1,6 @@
-package com.fcchyd.linkletandroid;
+package com.fcchyd.linkletandroid.Type;
 
-class LinkDataType {
+public class LinkDataType {
 
     private String title;
     private String description;

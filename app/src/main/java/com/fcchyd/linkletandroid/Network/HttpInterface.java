@@ -1,22 +1,26 @@
-package com.fcchyd.linkletandroid;
+package com.fcchyd.linkletandroid.Network;
+
+import com.fcchyd.linkletandroid.Model.Links;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+;
 
-interface HttpInterface {
+
+public interface HttpInterface {
 
     @GET(ApiEndPoints.ENDPOINT_ALL)
-    Call<LinksJavaBean>
+    Call<Links>
     httpGETpageNumber(@Query("page") int pageNumber);
 
     @GET(ApiEndPoints.ENDPOINT_ALL)
-    Call<LinksJavaBean>
+    Call<Links>
     httpGETdefault();
 
     @GET(ApiEndPoints.ENDPOINT_FILTER)
-    Call<LinksJavaBean>
+    Call<Links>
     httpGETinDateRange(@Query("start") long startTime, @Query("end") long endTime);
 
 }
